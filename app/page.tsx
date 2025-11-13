@@ -39,12 +39,12 @@ export default function Home() {
       : coffeeBeansData;
 
   return (
-    <main className="flex min-h-screen flex-col items-center py-4 px-0 md:p-12 lg:p-24">
+    <main className="flex min-h-screen flex-col items-center md:p-12 lg:p-24">
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm">
         <h1 className="text-3xl md:text-4xl font-bold text-center mb-8">Coffee Taste Finder</h1>
       </div>
       <div className="w-full max-w-5xl lg:flex">
-        <div className="lg:w-2/3">
+        <div className="w-11/12 lg:w-2/3">
           <ClientFlavorWheel onFlavorSelect={handleFlavorSelect} selectedFlavors={selectedFlavors} />
         </div>
         <div className="lg:w-1/3 p-4">
