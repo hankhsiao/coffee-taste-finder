@@ -1,4 +1,5 @@
 export interface FlavorLevel3 {
+  id: string;
   name: string;
   color_hex: string;
 }
@@ -22,11 +23,21 @@ export interface CoffeeBean {
   name: string;
   shopId: string;
   tasteNotes: string[];
+  price: number;
+  weight: string;
+  country: string;
+  region?: string;
+  processingMethod?: string;
+  productPageLink?: string;
 }
 
 export interface CoffeeShop {
   id: string;
   name: string;
+  website: string;
   address: string;
+  description: string;
+  googleMapsLink: string;
+  appleMapsLink: string;
   beanIds: string[];
 }

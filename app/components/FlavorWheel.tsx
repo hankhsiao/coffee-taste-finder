@@ -189,7 +189,7 @@ const FlavorWheel = ({ onFlavorSelect, selectedFlavors }: FlavorWheelProps) => {
             const startAngle1 = currentAngle;
             const angle1 = level1ChildrenCount * anglePerLevel3;
             const endAngle1 = startAngle1 + angle1;
-            const isLevel1Selected = level1.children.flatMap(c => c.children).every(c3 => selectedFlavors.includes(c3.name.toLowerCase()));
+            const isLevel1Selected = level1.children.flatMap(c => c.children).every(c3 => selectedFlavors.includes(c3.id));
             
             let level2AngleTracker = startAngle1;
 
@@ -200,7 +200,7 @@ const FlavorWheel = ({ onFlavorSelect, selectedFlavors }: FlavorWheelProps) => {
               const startAngle2 = level2AngleTracker;
               const angle2 = level2ChildrenCount * anglePerLevel3;
               const endAngle2 = startAngle2 + angle2;
-              const isLevel2Selected = level2.children.every(c3 => selectedFlavors.includes(c3.name.toLowerCase()));
+              const isLevel2Selected = level2.children.every(c3 => selectedFlavors.includes(c3.id));
               
               let level3AngleTracker = startAngle2;
 
@@ -211,7 +211,7 @@ const FlavorWheel = ({ onFlavorSelect, selectedFlavors }: FlavorWheelProps) => {
                 level3Slices = level2.children.map((level3) => {
                   const startAngle3 = level3AngleTracker;
                   const endAngle3 = startAngle3 + anglePerLevel3;
-                  const isLevel3Selected = selectedFlavors.includes(level3.name.toLowerCase());
+                  const isLevel3Selected = selectedFlavors.includes(level3.id);
                   
                   level3AngleTracker = endAngle3;
 
