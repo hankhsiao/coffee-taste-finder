@@ -59,6 +59,7 @@ const FlavorWheel = ({ onFlavorSelect, selectedFlavors }: FlavorWheelProps) => {
 
   const handleTouchMove = (e: TouchEvent<SVGSVGElement>) => {
     if (!isDragging.current) return;
+    e.preventDefault();
     const currentAngle = getAngle(e.touches[0].clientX, e.touches[0].clientY);
     const delta = currentAngle - previousAngle.current;
     setRotationAngle((prev) => prev + delta);
