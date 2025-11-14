@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import ClientFlavorWheel from './components/ClientFlavorWheel';
 import CoffeeBeanList from './components/CoffeeBeanList';
+import StickyComponent from './components/StickyComponent';
 import { coffeeBeansData } from './data/coffee-beans';
 import { flavorWheelData } from './data/flavors';
 import { Flavor, FlavorChild, FlavorLevel3 } from './data/types';
@@ -25,6 +26,24 @@ const flavorIdToNameMap = buildFlavorIdToNameMap();
 
 export default function Home() {
   const [selectedFlavors, setSelectedFlavors] = useState<string[]>([]);
+  const [wheelHeight, setWheelHeight] = useState(0);
+  const [isWheelSticky, setIsWheelSticky] = useState(false);
+  const wheelContainerRef = useRef<HTMLDivElement>(null);
+
+  // Track wheel container height to calculate yOffset
+  useEffect(() => {
+    const container = wheelContainerRef.current;
+    if (!container) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      setWheelHeight(container.offsetHeight);
+    });
+
+    resizeObserver.observe(container);
+    setWheelHeight(container.offsetHeight);
+
+    return () => resizeObserver.disconnect();
+  }, []);
 
   const handleFlavorSelect = (flavor: Flavor | FlavorChild | FlavorLevel3, level: 1 | 2 | 3) => {
     let flavorIds: string[] = [];
@@ -60,11 +79,16 @@ export default function Home() {
         <h1 className="text-4xl font-bold text-center">Coffee Taste Finder</h1>
       </div>
       <Description />
-      <div className="w-full max-w-7xl lg:flex lg:items-start">
-        <div className="lg:w-2/3">
-          <ClientFlavorWheel onFlavorSelect={handleFlavorSelect} selectedFlavors={selectedFlavors} />
+      <div className="w-full max-w-7xl lg:flex lg:items-start gap-4">
+        {/* Wheel container - sticky on mobile */}
+        <div ref={wheelContainerRef} className="w-full lg:w-2/3">
+          <StickyComponent className="w-full lg:w-2/3" yOffset={-Math.floor(wheelHeight / 3)} onStickyChange={setIsWheelSticky}>
+            <ClientFlavorWheel onFlavorSelect={handleFlavorSelect} selectedFlavors={selectedFlavors} enableSpinning={isWheelSticky} />
+          </StickyComponent>
         </div>
-        <div className="lg:w-1/3 p-4">
+        
+        {/* Coffee bean list */}
+        <div className="w-full lg:w-1/3 p-4 mt-4 lg:mt-0">
           <CoffeeBeanList beans={filteredBeans} />
         </div>
       </div>

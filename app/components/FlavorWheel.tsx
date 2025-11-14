@@ -7,9 +7,10 @@ import { Flavor, FlavorChild, FlavorLevel3 } from '../data/types';
 interface FlavorWheelProps {
   onFlavorSelect: (flavor: Flavor | FlavorChild | FlavorLevel3, level: 1 | 2 | 3) => void;
   selectedFlavors: string[];
+  enableSpinning?: boolean;
 }
 
-const FlavorWheel = ({ onFlavorSelect, selectedFlavors }: FlavorWheelProps) => {
+const FlavorWheel = ({ onFlavorSelect, selectedFlavors, enableSpinning = true }: FlavorWheelProps) => {
   const [rotationAngle, setRotationAngle] = useState(0);
   const isDragging = useRef(false);
   const previousAngle = useRef(0);
@@ -56,6 +57,7 @@ const FlavorWheel = ({ onFlavorSelect, selectedFlavors }: FlavorWheelProps) => {
 
 
   const handleMouseDown = (e: MouseEvent<SVGSVGElement>) => {
+    if (isMobile && !enableSpinning) return;
     isDragging.current = true;
     previousAngle.current = getAngle(e.clientX, e.clientY);
     svgRef.current?.classList.add('grabbing');
@@ -75,6 +77,7 @@ const FlavorWheel = ({ onFlavorSelect, selectedFlavors }: FlavorWheelProps) => {
   };
 
   const handleTouchStart = (e: TouchEvent<SVGSVGElement>) => {
+    if (!enableSpinning) return;
     isDragging.current = true;
     previousAngle.current = getAngle(e.touches[0].clientX, e.touches[0].clientY);
   };
