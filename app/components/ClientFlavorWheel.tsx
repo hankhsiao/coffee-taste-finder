@@ -6,6 +6,7 @@ import { Flavor, FlavorChild, FlavorLevel3 } from '../data/types';
 interface FlavorWheelProps {
   onFlavorSelect: (flavor: Flavor | FlavorChild | FlavorLevel3, level: 1 | 2 | 3) => void;
   selectedFlavors: string[];
+  enableSpinning?: boolean;
 }
 
 const FlavorWheel = dynamic(() => import('./FlavorWheel'), {
