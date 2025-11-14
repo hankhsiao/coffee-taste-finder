@@ -89,7 +89,7 @@ export default function Home() {
         
         {/* Coffee bean list */}
         <div className="w-full lg:w-1/3 p-4 mt-4 lg:mt-0">
-          <CoffeeBeanList beans={filteredBeans} />
+          <CoffeeBeanList beans={filteredBeans} selectedFlavors={selectedFlavors} />
         </div>
       </div>
     </main>
