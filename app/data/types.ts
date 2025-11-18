@@ -1,21 +1,21 @@
 export interface FlavorLevel3 {
   id: string;
   name: string;
-  color_hex: string;
+  colorHex: string;
 }
 
-export interface FlavorChild {
+export interface FlavorLevel2 {
   id: string;
   name: string;
-  color_hex: string;
+  colorHex: string;
   children: FlavorLevel3[];
 }
 
 export interface Flavor {
   id: string;
   name: string;
-  color_hex: string;
-  children: FlavorChild[];
+  colorHex: string;
+  children: FlavorLevel2[];
 }
 
 export interface CoffeeBean {
