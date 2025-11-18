@@ -1,15 +1,18 @@
-'use client';
+"use client";
 
-import dynamic from 'next/dynamic';
-import { Flavor, FlavorChild, FlavorLevel3 } from '../data/types';
+import dynamic from "next/dynamic";
+import { Flavor, FlavorLevel2, FlavorLevel3 } from "../data/types";
 
 interface FlavorWheelProps {
-  onFlavorSelect: (flavor: Flavor | FlavorChild | FlavorLevel3, level: 1 | 2 | 3) => void;
+  onFlavorSelect: (
+    flavor: Flavor | FlavorLevel2 | FlavorLevel3,
+    level: 1 | 2 | 3
+  ) => void;
   selectedFlavors: string[];
   enableSpinning?: boolean;
 }
 
-const FlavorWheel = dynamic(() => import('./FlavorWheel'), {
+const FlavorWheel = dynamic(() => import("./FlavorWheel"), {
   ssr: false,
 });
 
