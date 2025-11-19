@@ -1,10 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import PageLayout from "./components/layout/PageLayout";
 import CoffeeBeanList from "./components/CoffeeBeanList";
 import { coffeeBeansData } from "./data/coffee-beans";
-import Description from "./components/Description";
 import FlatFlavorWheel from "./components/FlatFlavorWheel";
+
+const socialLinks = [
+  { icon: "𝕏", url: "https://twitter.com", label: "Twitter" },
+  { icon: "📘", url: "https://facebook.com", label: "Facebook" },
+  { icon: "📷", url: "https://instagram.com", label: "Instagram" },
+];
 
 export default function Home() {
   const [selectedFlavors, setSelectedFlavors] = useState<string[]>([]);
@@ -17,23 +23,33 @@ export default function Home() {
       : coffeeBeansData;
 
   return (
-    <main className="flex min-h-screen flex-col items-center md:p-12 lg:p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <h1 className="text-4xl font-bold text-center">Coffee Taste Finder</h1>
+    <PageLayout
+      title="Coffee Taste Finder"
+      logo="☕"
+      socialLinks={socialLinks}
+      copyrightText="© 2025 Coffee Taste Finder. All rights reserved."
+    >
+      {/* Flavor wheel section */}
+      <div className="mb-10 sm:mb-12 md:mb-16">
+        <h2 className="mb-6 sm:mb-8 text-primary-text">
+          Filter by Taste Notes
+        </h2>
+        <FlatFlavorWheel
+          selectedFlavors={selectedFlavors}
+          onFlavorChange={setSelectedFlavors}
+        />
       </div>
-      <Description />
-      <FlatFlavorWheel
-        selectedFlavors={selectedFlavors}
-        onFlavorChange={setSelectedFlavors}
-      />
 
-      {/* Coffee bean list */}
-      <div className="w-full max-w-7xl p-4 mt-2">
+      {/* Coffee bean list section */}
+      <div className="mb-8 sm:mb-10">
+        <h2 className="mb-6 sm:mb-8 text-primary-text">
+          Available Coffees ({filteredBeans.length})
+        </h2>
         <CoffeeBeanList
           beans={filteredBeans}
           selectedFlavors={selectedFlavors}
         />
       </div>
-    </main>
+    </PageLayout>
   );
 }

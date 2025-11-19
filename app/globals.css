@@ -1,8 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Old paper background - light mode only */
+  --background: #f5f1e8;
+  --foreground: #2c1810;
+  
+  /* Color palette - forest and coffee inspired */
+  --primary-text: #2c1810;
+  --secondary-text: #6b5344;
+  --muted-text: #8b7355;
+  --accent-forest: #3d5a3b;
+  --accent-coffee: #6f4e37;
+  --light-accent: #c9b8a8;
+  --border-color: #d4cac0;
 }
 
 @theme inline {
@@ -12,15 +22,38 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Light mode only - remove dark mode preferences */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Typography Scale */
+h1 {
+  @apply text-4xl md:text-5xl font-bold text-(--primary-text) leading-tight;
+}
+
+h2 {
+  @apply text-2xl md:text-3xl font-semibold text-(--primary-text) leading-snug;
+}
+
+h3 {
+  @apply text-lg md:text-xl font-semibold text-(--primary-text) leading-snug;
+}
+
+p {
+  @apply text-base text-(--secondary-text) leading-relaxed;
+}
+
+.text-secondary {
+  @apply text-sm text-(--muted-text);
+}
+
+.text-muted {
+  @apply text-xs text-(--muted-text);
+}
+
+/* Remove default margin on headings for better control */
+h1, h2, h3 {
+  margin: 0;
 }
