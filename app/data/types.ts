@@ -29,6 +29,7 @@ export interface CoffeeBean {
   region?: string;
   processingMethod?: string;
   productPageLink?: string;
+  image?: string;
 }
 
 export interface CoffeeShop {
