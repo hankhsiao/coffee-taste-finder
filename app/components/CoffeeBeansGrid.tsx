@@ -23,7 +23,7 @@ export function CoffeeBeansGrid({ beans }: CoffeeBeansGridProps) {
                 <div className="bg-surface border border-border rounded-xl overflow-hidden transition-all duration-300 h-full flex flex-col hover:border-sage">
                 <div className="relative aspect-square overflow-hidden flex items-center justify-center bg-surface-alt">
                   <div 
-                    className="absolute inset-0 z-10"
+                    className="absolute inset-0"
                     style={{
                       background: `linear-gradient(135deg, ${firstTasteColor}30 0%, ${firstTasteColor}10 100%)`,
                     }}
@@ -35,7 +35,7 @@ export function CoffeeBeansGrid({ beans }: CoffeeBeansGridProps) {
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
                   ) : (
-                    <CoffeeBeanIcon color={firstTasteColor} size={48} className="relative z-20" />
+                    <CoffeeBeanIcon color={firstTasteColor} size={48} className="relative" />
                   )}
                 </div>
                 
