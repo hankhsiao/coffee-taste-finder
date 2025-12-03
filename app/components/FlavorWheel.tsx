@@ -17,19 +17,31 @@ interface FlavorWheelProps {
     level: 1 | 2 | 3
   ) => void;
   selectedFlavors: string[];
-  enableSpinning?: boolean;
+  /** Scale factor for SVG width relative to container. Default: 1 (100%). E.g., 0.5 = 50%, 1.5 = 150% */
+  scale?: number;
+  /** Translate X position as a multiple of the scaled SVG element width. Default: 0. E.g., -0.5 moves left by half the SVG width */
+  translateX?: number;
+  /** Translate Y position as a multiple of the scaled SVG element width. Default: 0. E.g., -0.5 moves up by half the SVG width */
+  translateY?: number;
+  /** Whether the container should hide overflow. Default: false */
+  isOverflowHidden?: boolean;
 }
 
 const FlavorWheel = ({
   onFlavorSelect,
   selectedFlavors,
-  enableSpinning = true,
+  scale = 1,
+  translateX = 0,
+  translateY = 0,
+  isOverflowHidden = false,
 }: FlavorWheelProps) => {
   const [rotationAngle, setRotationAngle] = useState(0);
-  const isDragging = useRef(false);
-  const previousAngle = useRef(0);
+  const isDraggingRef = useRef(false);
+  const previousAngleRef = useRef(0);
   const svgRef = useRef<SVGSVGElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const startTouchRef = useRef<{ x: number; y: number } | null>(null);
+  const isHorizontalDragRef = useRef(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -50,63 +62,74 @@ const FlavorWheel = ({
 
   useEffect(() => {
     const svgElement = svgRef.current;
+    if (!svgElement) return;
 
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!isDragging.current) return;
-      e.preventDefault();
-      const currentAngle = getAngle(e.touches[0].clientX, e.touches[0].clientY);
-      const delta = currentAngle - previousAngle.current;
+    const handleTouchMoveListener = (e: Event) => {
+      const touchEvent = e as unknown as TouchEvent;
+      if (!isDraggingRef.current || !startTouchRef.current) return;
+
+      const currentX = touchEvent.touches[0].clientX;
+      const currentY = touchEvent.touches[0].clientY;
+      const deltaX = currentX - startTouchRef.current.x;
+      const deltaY = currentY - startTouchRef.current.y;
+
+      // Determine if this is a horizontal or vertical swipe
+      if (!isHorizontalDragRef.current && Math.abs(deltaX) + Math.abs(deltaY) > 5) {
+        isHorizontalDragRef.current = Math.abs(deltaX) > Math.abs(deltaY);
+      }
+
+      // Only rotate if it's a horizontal drag, otherwise let browser scroll
+      if (!isHorizontalDragRef.current) {
+        return;
+      }
+
+      touchEvent.preventDefault();
+      const currentAngle = getAngle(currentX, currentY);
+      const delta = currentAngle - previousAngleRef.current;
       setRotationAngle((prev) => prev + delta);
-      previousAngle.current = currentAngle;
+      previousAngleRef.current = currentAngle;
     };
 
-    if (svgElement) {
-      svgElement.addEventListener(
-        "touchmove",
-        handleTouchMove as unknown as EventListener,
-        { passive: false }
-      );
-
-      return () => {
-        svgElement.removeEventListener(
-          "touchmove",
-          handleTouchMove as unknown as EventListener
-        );
-      };
-    }
-  }, [isDragging.current]);
+    svgElement.addEventListener("touchmove", handleTouchMoveListener, { passive: false });
+    return () => {
+      svgElement.removeEventListener("touchmove", handleTouchMoveListener);
+    };
+  }, []);
 
   const handleMouseDown = (e: MouseEvent<SVGSVGElement>) => {
-    if (isMobile && !enableSpinning) return;
-    isDragging.current = true;
-    previousAngle.current = getAngle(e.clientX, e.clientY);
+    isDraggingRef.current = true;
+    previousAngleRef.current = getAngle(e.clientX, e.clientY);
     svgRef.current?.classList.add("grabbing");
   };
 
   const handleMouseMove = (e: MouseEvent<SVGSVGElement>) => {
-    if (!isDragging.current) return;
+    if (!isDraggingRef.current) return;
     const currentAngle = getAngle(e.clientX, e.clientY);
-    const delta = currentAngle - previousAngle.current;
+    const delta = currentAngle - previousAngleRef.current;
     setRotationAngle((prev) => prev + delta);
-    previousAngle.current = currentAngle;
+    previousAngleRef.current = currentAngle;
   };
 
   const handleMouseUp = () => {
-    isDragging.current = false;
+    isDraggingRef.current = false;
     svgRef.current?.classList.remove("grabbing");
   };
 
   const handleTouchStart = (e: TouchEvent<SVGSVGElement>) => {
-    if (!enableSpinning) return;
-    isDragging.current = true;
-    previousAngle.current = getAngle(
+    isDraggingRef.current = true;
+    isHorizontalDragRef.current = false; // Reset on new touch
+    startTouchRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
+    previousAngleRef.current = getAngle(
       e.touches[0].clientX,
       e.touches[0].clientY
     );
   };
 
   const handleTouchEnd = () => {
-    isDragging.current = false;
+    isDraggingRef.current = false;
   };
 
   const centerX = 65;
@@ -207,13 +230,15 @@ const FlavorWheel = ({
 
   let currentAngle = 0;
 
-  const viewBox = isMobile ? "55 -10 85 150" : "-10 -10 150 150";
+  const svgScale = scale * 100;
+  const svgTranslateXPercent = translateX * 100;
+  const svgTranslateYPercent = translateY * 100;
 
   return (
-    <div className="w-full md:w-auto md:h-auto overflow-hidden">
+    <div className={`w-full md:w-auto md:h-auto ${isOverflowHidden ? 'overflow-hidden' : ''}`}>
       <svg
-        viewBox={viewBox}
-        className="w-full h-auto"
+        viewBox="-10 -10 150 150"
+        className="h-auto"
         ref={svgRef}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -221,7 +246,12 @@ const FlavorWheel = ({
         onMouseLeave={handleMouseUp}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
-        style={{ cursor: isDragging.current ? "grabbing" : "grab" }}
+        style={{ 
+          cursor: isDraggingRef.current ? "grabbing" : "grab",
+          width: `${svgScale}%`,
+          transform: `translate(${svgTranslateXPercent}%, ${svgTranslateYPercent}%)`,
+          transformOrigin: 'top left'
+        }}
       >
         <g transform={`rotate(${rotationAngle}, ${centerX}, ${centerY})`}>
           {categories.map((level1) => {
