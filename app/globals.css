@@ -1,26 +1,88 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Shibui-inspired color palette */
+  --background: #F5F3F0;          /* Warm cream/off-white instead of stark white */
+  --foreground: #2F2B28;
+  
+  /* Primary - Moss Green and Earthy Brown */
+  --color-moss: #6B8E6B;
+  --color-brown: #8B7355;
+  
+  /* Neutrals */
+  --color-stone: #A8A39B;
+  --color-sage: #9BA896;
+  --color-clay: #C4A89C;
+  
+  /* Surface colors - warmer and more refined */
+  --color-surface: #FEFCF9;       /* Slightly warmer white for cards */
+  --color-surface-alt: #F5F3F0;   /* Warm grey for secondary surfaces */
+  --color-border: #E8E4DE;        /* Warm beige border */
+  
+  /* Header specific */
+  --color-header-bg: #FAF8F5;     /* Light warm bg for header */
+  
+  /* Footer specific */
+  --color-footer-bg: #3D3935;     /* Dark charcoal for stability */
+  --color-footer-text: #2F2B28;   /* Dark text on light footer in light mode */
+  --color-footer-heading: #F5F3F0; /* Light heading color for footer */
+  --color-footer-text-muted: #A8A39B; /* Muted text for secondary content */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-moss: var(--color-moss);
+  --color-brown: var(--color-brown);
+  --color-stone: var(--color-stone);
+  --color-sage: var(--color-sage);
+  --color-clay: var(--color-clay);
+  --color-surface: var(--color-surface);
+  --color-surface-alt: var(--color-surface-alt);
+  --color-border: var(--color-border);
+  --color-header-bg: var(--color-header-bg);
+  --color-footer-bg: var(--color-footer-bg);
+  --color-footer-text: var(--color-footer-text);
+  --color-footer-heading: var(--color-footer-heading);
+  --color-footer-text-muted: var(--color-footer-text-muted);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1A1815;           /* Deep brown-black */
+    --foreground: #F3F1ED;           /* Warm off-white text */
+    
+    /* Dark mode surfaces using Shibui palette */
+    --color-surface: #262220;        /* Deep charcoal */
+    --color-surface-alt: #3D3935;    /* Slightly lighter charcoal */
+    --color-border: #4A423D;         /* Warm dark border */
+    
+    /* Header - slightly lighter than body */
+    --color-header-bg: #1F1C19;      /* Slightly lighter than background */
+    
+    /* Footer - darker for visual stability */
+    --color-footer-bg: #0D0B0A;      /* Nearly black for weight */
+    
+    /* Footer text colors in dark mode - light text on dark bg */
+    --color-footer-text: #F3F1ED;     /* Light text for footer in dark mode */
+    --color-footer-heading: #FEFCF9;  /* Even lighter for headings in dark mode */
+    --color-footer-text-muted: #A8A39B; /* Muted text (unchanged) */
+    
+    /* Accent colors remain consistent */
+    --color-moss: #6B8E6B;
+    --color-brown: #8B7355;
+    --color-stone: #A8A39B;
+    --color-sage: #9BA896;
+    --color-clay: #C4A89C;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

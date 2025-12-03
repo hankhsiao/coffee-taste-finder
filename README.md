@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Coffee Taste Finder
+
+A systematic tool to discover coffee beans by taste notes and document coffee shops for future visits.
+
+## Project Goal
+
+To find coffee beans by taste notes and maintain a curated collection of coffee shops through an intuitive, visually-driven interface.
+
+## Requirements
+
+### Overall Design Principles
+- **Responsive Design**: Mobile and desktop optimized
+- **Theme Support**: Dark mode and light mode
+- **Design Philosophy**: 
+  - Intuitive interaction with clear and concise information
+  - Shibui color pattern: muted tones with Moss Green and Earthy Brown as key colors
+  - Simple, professional, welcoming typography
+  - Minimal color usage for page architecture (content focuses on taste colors)
+
+### Common Page Structure
+- **Header**: Navigation menu to switch between different tools
+- **Footer**: Copyright and social information
+- **Entity Pages** (Coffee shops, coffee beans):
+  - Image area with swipeable gallery support
+  - Simple, clear feature icons
+  - Concise descriptions
+- **List Views**: 
+  - Two columns on mobile, three columns on desktop
+  - Square image areas with descriptions below each item
+
+### Pages
+
+#### Main Page
+Tool to find coffee beans by tastes:
+- Pick from flavor wheel
+- Pick from similar coffee beans
+- Intuitive discovery experience
+
+#### Coffee Bean Page
+- Image with taste color background
+- Detailed coffee information
+- Social signals and engagement
+
+#### Coffee Shop Page
+- Key images with swipeable gallery
+- Feature icons
+- Basic location and information
 
 ## Getting Started
 
-First, run the development server:
+### Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The app will auto-update as you edit files in `app/` directory.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Build & Production
 
-## Learn More
+```bash
+npm run build
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js](https://nextjs.org) - React framework
+- TypeScript - Type safety
+- Tailwind CSS - Styling (responsive, dark mode support)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+app/
+├── page.tsx              # Main landing page
+├── coffee-bean/[id]/     # Coffee bean detail pages
+├── coffee-shop/[id]/     # Coffee shop detail pages
+├── components/           # Reusable React components
+└── data/                 # Data files (coffee beans, shops, flavors)
+```

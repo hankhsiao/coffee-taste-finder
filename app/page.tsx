@@ -1,39 +1,33 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import CoffeeBeanList from "./components/CoffeeBeanList";
-import { coffeeBeansData } from "./data/coffee-beans";
-import Description from "./components/Description";
-import FlatFlavorWheel from "./components/FlatFlavorWheel";
+import { Header } from './components/Header';
+import { Footer } from './components/Footer';
+import { CoffeeBeansGrid } from './components/CoffeeBeansGrid';
+import { coffeeBeansData } from './data/coffee-beans';
 
 export default function Home() {
-  const [selectedFlavors, setSelectedFlavors] = useState<string[]>([]);
-
-  const filteredBeans =
-    selectedFlavors.length > 0
-      ? coffeeBeansData.filter((bean) =>
-          selectedFlavors.some((flavorId) => bean.tasteNotes.includes(flavorId))
-        )
-      : coffeeBeansData;
-
   return (
-    <main className="flex min-h-screen flex-col items-center md:p-12 lg:p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <h1 className="text-4xl font-bold text-center">Coffee Taste Finder</h1>
-      </div>
-      <Description />
-      <FlatFlavorWheel
-        selectedFlavors={selectedFlavors}
-        onFlavorChange={setSelectedFlavors}
-      />
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <Header />
+      
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="px-4 md:px-6 lg:px-8 py-12 md:py-20 max-w-7xl mx-auto">
+          <div className="mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-2">
+              Find Coffee by Taste
+            </h2>
+            <p className="max-w-xl text-stone">
+              Browse our curated selection and filter by flavor profile
+            </p>
+          </div>
 
-      {/* Coffee bean list */}
-      <div className="w-full max-w-7xl p-4 mt-2">
-        <CoffeeBeanList
-          beans={filteredBeans}
-          selectedFlavors={selectedFlavors}
-        />
-      </div>
-    </main>
+          {/* Grid with larger cards */}
+          <CoffeeBeansGrid beans={coffeeBeansData} />
+        </section>
+      </main>
+
+      <Footer />
+    </div>
   );
 }
