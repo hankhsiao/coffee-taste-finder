@@ -7,9 +7,10 @@ import { CoffeeBeanIcon } from './CoffeeBeanIcon';
 
 interface CoffeeBeansGridProps {
   beans: CoffeeBean[];
+  selectedFlavors?: Set<string>;
 }
 
-export function CoffeeBeansGrid({ beans }: CoffeeBeansGridProps) {
+export function CoffeeBeansGrid({ beans, selectedFlavors = new Set() }: CoffeeBeansGridProps) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 gap-6 text-foreground">
       {beans.map((bean) => {
@@ -61,14 +62,16 @@ export function CoffeeBeansGrid({ beans }: CoffeeBeansGridProps) {
                       {bean.tasteNotes.map((tasteId, index) => {
                         const tasteColor = getTasteColor(tasteId);
                         const tasteName = getTasteName(tasteId);
+                        const isHighlighted = selectedFlavors.has(tasteId);
                         return (
                           <span
                             key={`${tasteId}-${index}`}
                             className="inline-block px-2.5 py-1.5 text-xs font-semibold rounded-full border transition-colors duration-300"
                             style={{
-                              backgroundColor: `${tasteColor}30`,
+                              backgroundColor: isHighlighted ? tasteColor : `${tasteColor}30`,
                               borderColor: tasteColor,
-                              color: tasteColor,
+                              color: isHighlighted ? '#fff' : tasteColor,
+                              boxShadow: isHighlighted ? `0 0 0 1px #f5f5f4, 0 0 0 3px ${tasteColor}` : 'none',
                             }}
                           >
                             {tasteName}
