@@ -9,15 +9,67 @@ import { coffeeBeansData } from './data/coffee-beans';
 import { Flavor, FlavorLevel2, FlavorLevel3 } from './data/types';
 
 export default function Home() {
-  const [selectedFlavors, setSelectedFlavors] = useState<string[]>([]);
+  const [selectedFlavors, setSelectedFlavors] = useState<Set<string>>(new Set());
 
   const handleFlavorSelect = (
     flavor: Flavor | FlavorLevel2 | FlavorLevel3,
     level: 1 | 2 | 3
   ) => {
     // Handle flavor selection here
-    console.log('Selected flavor:', flavor, 'Level:', level);
+    const flavorId = flavor.id;
+    
+    if (level === 3) {
+      // For level 3 (leaf nodes), toggle the flavor
+      setSelectedFlavors((prev) => {
+        const newSet = new Set(prev);
+        if (newSet.has(flavorId)) {
+          newSet.delete(flavorId);
+        } else {
+          newSet.add(flavorId);
+        }
+        return newSet;
+      });
+    } else if (level === 2) {
+      // For level 2, toggle all children
+      const level2 = flavor as FlavorLevel2;
+      const childIds = level2.children.map((child) => child.id);
+      const allSelected = childIds.every((id) => selectedFlavors.has(id));
+      
+      setSelectedFlavors((prev) => {
+        const newSet = new Set(prev);
+        if (allSelected) {
+          childIds.forEach((id) => newSet.delete(id));
+        } else {
+          childIds.forEach((id) => newSet.add(id));
+        }
+        return newSet;
+      });
+    } else if (level === 1) {
+      // For level 1, toggle all children of all level 2s
+      const level1 = flavor as Flavor;
+      const allChildIds = level1.children.flatMap((level2) =>
+        level2.children.map((child) => child.id)
+      );
+      const allSelected = allChildIds.every((id) => selectedFlavors.has(id));
+      
+      setSelectedFlavors((prev) => {
+        const newSet = new Set(prev);
+        if (allSelected) {
+          allChildIds.forEach((id) => newSet.delete(id));
+        } else {
+          allChildIds.forEach((id) => newSet.add(id));
+        }
+        return newSet;
+      });
+    }
   };
+
+  // Filter coffee beans by selected flavors
+  const filteredBeans = selectedFlavors.size === 0
+    ? coffeeBeansData
+    : coffeeBeansData.filter((bean) =>
+        bean.tasteNotes.some((tasteNote) => selectedFlavors.has(tasteNote))
+      );
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -55,7 +107,7 @@ export default function Home() {
           </div>
 
           {/* Grid with larger cards */}
-          <CoffeeBeansGrid beans={coffeeBeansData} />
+          <CoffeeBeansGrid beans={filteredBeans} selectedFlavors={selectedFlavors} />
         </section>
 
         {/* Desktop Layout */}
@@ -87,7 +139,7 @@ export default function Home() {
 
               {/* Right Column - Grid */}
               <div className="flex-1">
-                <CoffeeBeansGrid beans={coffeeBeansData} />
+                <CoffeeBeansGrid beans={filteredBeans} selectedFlavors={selectedFlavors} />
               </div>
             </div>
           </div>

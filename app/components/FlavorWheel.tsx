@@ -16,7 +16,7 @@ interface FlavorWheelProps {
     flavor: Flavor | FlavorLevel2 | FlavorLevel3,
     level: 1 | 2 | 3
   ) => void;
-  selectedFlavors: string[];
+  selectedFlavors: Set<string>;
   /** Scale factor for SVG width relative to container. Default: 1 (100%). E.g., 0.5 = 50%, 1.5 = 150% */
   scale?: number;
   /** Translate X position as a multiple of the scaled SVG element width. Default: 0. E.g., -0.5 moves left by half the SVG width */
@@ -264,7 +264,7 @@ const FlavorWheel = ({
             const endAngle1 = startAngle1 + angle1;
             const isLevel1Selected = level1.children
               .flatMap((c) => c.children)
-              .every((c3) => selectedFlavors.includes(c3.id));
+              .every((c3) => selectedFlavors.has(c3.id));
 
             let level2AngleTracker = startAngle1;
 
@@ -287,7 +287,7 @@ const FlavorWheel = ({
               const angle2 = level2ChildrenCount * anglePerLevel3;
               const endAngle2 = startAngle2 + angle2;
               const isLevel2Selected = level2.children.every((c3) =>
-                selectedFlavors.includes(c3.id)
+                selectedFlavors.has(c3.id)
               );
 
               let level3AngleTracker = startAngle2;
@@ -315,7 +315,7 @@ const FlavorWheel = ({
                 level3Slices = level2.children.map((level3) => {
                   const startAngle3 = level3AngleTracker;
                   const endAngle3 = startAngle3 + anglePerLevel3;
-                  const isLevel3Selected = selectedFlavors.includes(level3.id);
+                  const isLevel3Selected = selectedFlavors.has(level3.id);
 
                   level3AngleTracker = endAngle3;
 
